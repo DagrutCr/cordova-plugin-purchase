@@ -566,11 +566,15 @@ var CdvPurchase;
                 this.receiptsToValidate.clear();
                 const onResponse = (r) => __awaiter(this, void 0, void 0, function* () {
                     var _a;
+                    window.crowdaaDebug.log('cordova-plugin-purchase onResponse', r);
                     const { receipt, payload } = r;
                     this.incrResponsesCounter();
                     try {
+                        window.crowdaaDebug.log('cordova-plugin-purchase onResponse try');
                         const adapter = this.controller.adapters.find(receipt.platform);
+                        window.crowdaaDebug.log('cordova-plugin-purchase onResponse adapter', adapter);
                         yield (adapter === null || adapter === void 0 ? void 0 : adapter.handleReceiptValidationResponse(receipt, payload));
+                        window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
                         if (payload.ok) {
                             const vr = this.addVerifiedReceipt(receipt, payload.data);
                             this.controller.verifiedCallbacks.trigger(vr, 'payload_ok');
