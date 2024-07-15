@@ -15,6 +15,7 @@
         "no-use-before-define": [ 1, "nofunc" ]
     },
     "globals" : {
-        "store": true
+        "store": true,
+        "crowdaaDebug": true
     }
 }
