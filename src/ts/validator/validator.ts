@@ -116,11 +116,13 @@ namespace CdvPurchase {
                 const onResponse = async (r: ReceiptResponse) => {
                     window.crowdaaDebug.log('cordova-plugin-purchase onResponse', r);
                     const { receipt, payload } = r;
+                    window.crowdaaDebug.log('cordova-plugin-purchase onResponse receipt', receipt);
+                    window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
                     this.incrResponsesCounter();
                     try {
                         window.crowdaaDebug.log('cordova-plugin-purchase onResponse try');
                         const adapter = this.controller.adapters.find(receipt.platform);
-                        window.crowdaaDebug.log('cordova-plugin-purchase onResponse adapter', adapter);
+                        window.crowdaaDebug.log('cordova-plugin-purchase onResponse adapter', !!adapter);
                         await adapter?.handleReceiptValidationResponse(receipt, payload);
                         window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
                         if (payload.ok) {
