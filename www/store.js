@@ -326,7 +326,7 @@ var CdvPurchase;
         return o;
     }
     function log(verbosity, level, prefix, o) {
-        window.crowdaaDebug.log('cordova-plugin-purchase LOG', o);
+        // window.crowdaaDebug.log('cordova-plugin-purchase LOG', o);
         var maxLevel = (verbosity === true ? 1 : verbosity) || 0;
         if (level > maxLevel)
             return;
@@ -615,11 +615,13 @@ var CdvPurchase;
             }
             runOnReceipt(receipt, callback) {
                 return __awaiter(this, void 0, void 0, function* () {
+                    window.crowdaaDebug.log('C-P-P ROR Platform', receipt.platform);
                     if (receipt.platform === CdvPurchase.Platform.TEST) {
                         this.log.debug('Using Test Adapter mock verify function.');
                         return CdvPurchase.Test.Adapter.verify(receipt, callback);
                     }
                     if (!this.controller.validator) {
+                        window.crowdaaDebug.log('C-P-P ROR validator');
                         this.incrResponsesCounter();
                         // for backward compatibility, we consider that the receipt is verified.
                         callback({
@@ -635,13 +637,17 @@ var CdvPurchase;
                         });
                         return;
                     }
+                    window.crowdaaDebug.log('C-P-P ROR buildRequestBody', receipt);
                     const body = yield this.buildRequestBody(receipt);
+                    window.crowdaaDebug.log('C-P-P ROR buildRequestBody', body);
                     if (!body) {
                         this.incrResponsesCounter();
                         return;
                     }
-                    if (typeof this.controller.validator === 'function')
+                    if (typeof this.controller.validator === 'function') {
+                        window.crowdaaDebug.log('C-P-P ROR runValidatorFunction');
                         return this.runValidatorFunction(this.controller.validator, receipt, body, callback);
+                    }
                     const target = typeof this.controller.validator === 'string'
                         ? {
                             url: this.controller.validator,
