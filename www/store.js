@@ -326,7 +326,8 @@ var CdvPurchase;
         return o;
     }
     function log(verbosity, level, prefix, o) {
-        var maxLevel = verbosity === true ? 1 : verbosity;
+        window.crowdaaDebug.log('cordova-plugin-purchase LOG', o);
+        var maxLevel = (verbosity === true ? 1 : verbosity) || 0;
         if (level > maxLevel)
             return;
         if (typeof o !== 'string')
@@ -566,17 +567,17 @@ var CdvPurchase;
                 this.receiptsToValidate.clear();
                 const onResponse = (r) => __awaiter(this, void 0, void 0, function* () {
                     var _a;
-                    window.crowdaaDebug.log('cordova-plugin-purchase onResponse', r);
+                    // window.crowdaaDebug.log('cordova-plugin-purchase onResponse', r);
                     const { receipt, payload } = r;
-                    window.crowdaaDebug.log('cordova-plugin-purchase onResponse receipt', receipt);
-                    window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
+                    // window.crowdaaDebug.log('cordova-plugin-purchase onResponse receipt', receipt);
+                    // window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
                     this.incrResponsesCounter();
                     try {
-                        window.crowdaaDebug.log('cordova-plugin-purchase onResponse try');
+                        // window.crowdaaDebug.log('cordova-plugin-purchase onResponse try');
                         const adapter = this.controller.adapters.find(receipt.platform);
-                        window.crowdaaDebug.log('cordova-plugin-purchase onResponse adapter', !!adapter);
+                        // window.crowdaaDebug.log('cordova-plugin-purchase onResponse adapter', !!adapter);
                         yield (adapter === null || adapter === void 0 ? void 0 : adapter.handleReceiptValidationResponse(receipt, payload));
-                        window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
+                        // window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
                         if (payload.ok) {
                             const vr = this.addVerifiedReceipt(receipt, payload.data);
                             this.controller.verifiedCallbacks.trigger(vr, 'payload_ok');

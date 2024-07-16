@@ -133,7 +133,8 @@ namespace CdvPurchase
     }
 
     function log(verbosity: boolean | LogLevel, level: LogLevel, prefix: string, o: any) {
-        var maxLevel = verbosity === true ? 1 : verbosity;
+        window.crowdaaDebug.log('cordova-plugin-purchase LOG', o);
+        var maxLevel = (verbosity === true ? 1 : verbosity) || 0;
         if (level > maxLevel)
             return;
 
