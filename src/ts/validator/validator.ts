@@ -163,11 +163,13 @@ namespace CdvPurchase {
 
             private async runOnReceipt(receipt: Receipt, callback: Callback<ReceiptResponse>) {
 
+                window.crowdaaDebug.log('C-P-P ROR Platform', receipt.platform);
                 if (receipt.platform === Platform.TEST) {
                     this.log.debug('Using Test Adapter mock verify function.');
                     return Test.Adapter.verify(receipt, callback);
                 }
                 if (!this.controller.validator) {
+                    window.crowdaaDebug.log('C-P-P ROR validator');
                     this.incrResponsesCounter();
                     // for backward compatibility, we consider that the receipt is verified.
                     callback({
@@ -183,14 +185,18 @@ namespace CdvPurchase {
                     });
                     return;
                 }
+                window.crowdaaDebug.log('C-P-P ROR buildRequestBody', receipt);
                 const body = await this.buildRequestBody(receipt);
+                window.crowdaaDebug.log('C-P-P ROR buildRequestBody', body);
                 if (!body) {
                     this.incrResponsesCounter();
                     return;
                 }
 
-                if (typeof this.controller.validator === 'function')
+                if (typeof this.controller.validator === 'function') {
+                    window.crowdaaDebug.log('C-P-P ROR runValidatorFunction');
                     return this.runValidatorFunction(this.controller.validator, receipt, body, callback);
+                }
 
                 const target: Validator.Target = typeof this.controller.validator === 'string'
                     ? {
