@@ -687,10 +687,14 @@ namespace CdvPurchase {
                     applicationReceipt = result;
                 }
                 const transaction = skReceipt.transactions.slice(-1)[0] as (SKTransaction | undefined);
+                const productId = transaction?.products[0]?.id;
+                if (!productId) return;
+                const product = this._products.find((product) => product.id === productId);
+                if (!product) return;
                 return {
-                    id: applicationReceipt.bundleIdentifier,
-                    type: ProductType.APPLICATION,
-                    // send all products and offers so validator get pricing information
+                    id: productId,
+                    type: product.type,
+                    offers: product.offers,
                     products: Utils.objectValues(this.validProducts).map(vp => new SKProduct(vp, vp, this.context.apiDecorators, { isEligible: () => true })),
                     transaction: {
                         type: 'ios-appstore',

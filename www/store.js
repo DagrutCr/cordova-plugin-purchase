@@ -3189,6 +3189,7 @@ var CdvPurchase;
                 });
             }
             receiptValidationBody(receipt) {
+                var _a;
                 return __awaiter(this, void 0, void 0, function* () {
                     if (receipt.platform !== CdvPurchase.Platform.APPLE_APPSTORE)
                         return;
@@ -3221,10 +3222,16 @@ var CdvPurchase;
                         applicationReceipt = result;
                     }
                     const transaction = skReceipt.transactions.slice(-1)[0];
+                    const productId = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.products[0]) === null || _a === void 0 ? void 0 : _a.id;
+                    if (!productId)
+                        return;
+                    const product = this._products.find((product) => product.id === productId);
+                    if (!product)
+                        return;
                     return {
-                        id: applicationReceipt.bundleIdentifier,
-                        type: CdvPurchase.ProductType.APPLICATION,
-                        // send all products and offers so validator get pricing information
+                        id: productId,
+                        type: product.type,
+                        offers: product.offers,
                         products: CdvPurchase.Utils.objectValues(this.validProducts).map(vp => new AppleAppStore.SKProduct(vp, vp, this.context.apiDecorators, { isEligible: () => true })),
                         transaction: {
                             type: 'ios-appstore',
