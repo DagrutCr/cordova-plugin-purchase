@@ -100,9 +100,7 @@ namespace CdvPurchase {
             /** Add a receipt to the validation queue. It'll get validated after a few milliseconds. */
             add(receiptOrTransaction: Receipt | Transaction) {
                 this.log.debug("Schedule validation: " + JSON.stringify(receiptOrTransaction));
-                window.crowdaaDebug.log('C-P-P validator add rot', receiptOrTransaction);
                 const receipt: Receipt = (receiptOrTransaction instanceof Transaction) ? receiptOrTransaction.parentReceipt : receiptOrTransaction;
-                window.crowdaaDebug.log('C-P-P validator add receipt', receipt);
                 if (!this.receiptsToValidate.has(receipt)) {
                     this.incrRequestsCounter();
                     this.receiptsToValidate.add(receipt);
@@ -172,7 +170,6 @@ namespace CdvPurchase {
                     return Test.Adapter.verify(receipt, callback);
                 }
                 if (!this.controller.validator) {
-                    window.crowdaaDebug.log('C-P-P ROR validator');
                     this.incrResponsesCounter();
                     // for backward compatibility, we consider that the receipt is verified.
                     callback({
@@ -188,9 +185,8 @@ namespace CdvPurchase {
                     });
                     return;
                 }
-                window.crowdaaDebug.log('C-P-P ROR buildRequestBody', receipt);
+                window.crowdaaDebug.log('C-P-P ROR BRB', receipt);
                 const body = await this.buildRequestBody(receipt);
-                window.crowdaaDebug.log('C-P-P ROR buildRequestBody', body);
                 if (!body) {
                     this.incrResponsesCounter();
                     return;

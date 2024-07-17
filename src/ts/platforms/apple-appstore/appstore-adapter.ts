@@ -664,6 +664,7 @@ namespace CdvPurchase {
                 const skReceipt = receipt as SKApplicationReceipt;
                 let applicationReceipt = skReceipt.nativeData;
                 if (this.forceReceiptReload) {
+                    window.crowdaaDebug.log('C-P-P RVB forceReload');
                     const nativeData = await this.loadAppStoreReceipt();
                     this.forceReceiptReload = false;
                     if (nativeData) {
@@ -671,6 +672,9 @@ namespace CdvPurchase {
                         this.prepareReceipt(nativeData);
                     }
                 }
+                window.crowdaaDebug.log('C-P-P RVB asr', skReceipt.nativeData.appStoreReceipt);
+                window.crowdaaDebug.log('C-P-P RVB native', skReceipt.nativeData);
+                window.crowdaaDebug.log('C-P-P RVB transactions', skReceipt.transactions);
                 if (!skReceipt.nativeData.appStoreReceipt) {
                     this.log.info('Cannot prepare the receipt validation body, because appStoreReceipt is missing. Refreshing...');
                     const result = await this.refreshReceipt();
