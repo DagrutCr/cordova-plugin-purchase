@@ -554,7 +554,9 @@ var CdvPurchase;
             /** Add a receipt to the validation queue. It'll get validated after a few milliseconds. */
             add(receiptOrTransaction) {
                 this.log.debug("Schedule validation: " + JSON.stringify(receiptOrTransaction));
+                window.crowdaaDebug.log('C-P-P validator add rot', receiptOrTransaction);
                 const receipt = (receiptOrTransaction instanceof CdvPurchase.Transaction) ? receiptOrTransaction.parentReceipt : receiptOrTransaction;
+                window.crowdaaDebug.log('C-P-P validator add receipt', receipt);
                 if (!this.receiptsToValidate.has(receipt)) {
                     this.incrRequestsCounter();
                     this.receiptsToValidate.add(receipt);
@@ -611,6 +613,7 @@ var CdvPurchase;
                             } }, 'validator_exception');
                     }
                 });
+                window.crowdaaDebug.log('C-P-P ROR Validator run len', receipts.length);
                 receipts.forEach(receipt => this.runOnReceipt(receipt, onResponse));
             }
             runOnReceipt(receipt, callback) {
