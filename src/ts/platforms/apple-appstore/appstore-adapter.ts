@@ -699,7 +699,7 @@ namespace CdvPurchase {
                     transaction: {
                         type: 'ios-appstore',
                         id: transaction?.transactionId,
-                        appStoreReceipt: applicationReceipt.appStoreReceipt,
+                        appStoreReceipt: skReceipt.nativeData.appStoreReceipt,
                     }
                 }
             }
