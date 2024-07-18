@@ -13,8 +13,4 @@ declare interface Window {
     Capacitor?: {
         getPlatform(): 'ios' | 'android' | 'web';
     }
-
-    crowdaaDebug: {
-        log: function;
-    }
 }

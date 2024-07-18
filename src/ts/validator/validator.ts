@@ -114,17 +114,11 @@ namespace CdvPurchase {
                 this.receiptsToValidate.clear();
 
                 const onResponse = async (r: ReceiptResponse) => {
-                    // window.crowdaaDebug.log('cordova-plugin-purchase onResponse', r);
                     const { receipt, payload } = r;
-                    // window.crowdaaDebug.log('cordova-plugin-purchase onResponse receipt', receipt);
-                    // window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
                     this.incrResponsesCounter();
                     try {
-                        // window.crowdaaDebug.log('cordova-plugin-purchase onResponse try');
                         const adapter = this.controller.adapters.find(receipt.platform);
-                        // window.crowdaaDebug.log('cordova-plugin-purchase onResponse adapter', !!adapter);
                         await adapter?.handleReceiptValidationResponse(receipt, payload);
-                        // window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
                         if (payload.ok) {
                             const vr = this.addVerifiedReceipt(receipt, payload.data);
                             this.controller.verifiedCallbacks.trigger(vr, 'payload_ok');
@@ -158,13 +152,11 @@ namespace CdvPurchase {
                         }}, 'validator_exception');
                     }
                 };
-                // window.crowdaaDebug.log('C-P-P ROR Validator run len', receipts.length);
                 receipts.forEach(receipt => this.runOnReceipt(receipt, onResponse));
             }
 
             private async runOnReceipt(receipt: Receipt, callback: Callback<ReceiptResponse>) {
 
-                // window.crowdaaDebug.log('C-P-P ROR Platform', receipt.platform);
                 if (receipt.platform === Platform.TEST) {
                     this.log.debug('Using Test Adapter mock verify function.');
                     return Test.Adapter.verify(receipt, callback);
@@ -185,7 +177,6 @@ namespace CdvPurchase {
                     });
                     return;
                 }
-                // window.crowdaaDebug.log('C-P-P ROR BRB', receipt);
                 const body = await this.buildRequestBody(receipt);
                 if (!body) {
                     this.incrResponsesCounter();
@@ -193,7 +184,6 @@ namespace CdvPurchase {
                 }
 
                 if (typeof this.controller.validator === 'function') {
-                    // window.crowdaaDebug.log('C-P-P ROR runValidatorFunction');
                     return this.runValidatorFunction(this.controller.validator, receipt, body, callback);
                 }
 

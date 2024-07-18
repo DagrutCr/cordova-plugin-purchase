@@ -326,7 +326,6 @@ var CdvPurchase;
         return o;
     }
     function log(verbosity, level, prefix, o) {
-        // window.crowdaaDebug.log('cordova-plugin-purchase LOG', o);
         var maxLevel = (verbosity === true ? 1 : verbosity) || 0;
         if (level > maxLevel)
             return;
@@ -567,17 +566,11 @@ var CdvPurchase;
                 this.receiptsToValidate.clear();
                 const onResponse = (r) => __awaiter(this, void 0, void 0, function* () {
                     var _a;
-                    // window.crowdaaDebug.log('cordova-plugin-purchase onResponse', r);
                     const { receipt, payload } = r;
-                    // window.crowdaaDebug.log('cordova-plugin-purchase onResponse receipt', receipt);
-                    // window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
                     this.incrResponsesCounter();
                     try {
-                        // window.crowdaaDebug.log('cordova-plugin-purchase onResponse try');
                         const adapter = this.controller.adapters.find(receipt.platform);
-                        // window.crowdaaDebug.log('cordova-plugin-purchase onResponse adapter', !!adapter);
                         yield (adapter === null || adapter === void 0 ? void 0 : adapter.handleReceiptValidationResponse(receipt, payload));
-                        // window.crowdaaDebug.log('cordova-plugin-purchase onResponse payload', payload);
                         if (payload.ok) {
                             const vr = this.addVerifiedReceipt(receipt, payload.data);
                             this.controller.verifiedCallbacks.trigger(vr, 'payload_ok');
@@ -611,12 +604,10 @@ var CdvPurchase;
                             } }, 'validator_exception');
                     }
                 });
-                // window.crowdaaDebug.log('C-P-P ROR Validator run len', receipts.length);
                 receipts.forEach(receipt => this.runOnReceipt(receipt, onResponse));
             }
             runOnReceipt(receipt, callback) {
                 return __awaiter(this, void 0, void 0, function* () {
-                    // window.crowdaaDebug.log('C-P-P ROR Platform', receipt.platform);
                     if (receipt.platform === CdvPurchase.Platform.TEST) {
                         this.log.debug('Using Test Adapter mock verify function.');
                         return CdvPurchase.Test.Adapter.verify(receipt, callback);
@@ -637,14 +628,12 @@ var CdvPurchase;
                         });
                         return;
                     }
-                    // window.crowdaaDebug.log('C-P-P ROR BRB', receipt);
                     const body = yield this.buildRequestBody(receipt);
                     if (!body) {
                         this.incrResponsesCounter();
                         return;
                     }
                     if (typeof this.controller.validator === 'function') {
-                        // window.crowdaaDebug.log('C-P-P ROR runValidatorFunction');
                         return this.runValidatorFunction(this.controller.validator, receipt, body, callback);
                     }
                     const target = typeof this.controller.validator === 'string'
@@ -3198,7 +3187,6 @@ var CdvPurchase;
                     const skReceipt = receipt;
                     let applicationReceipt = skReceipt.nativeData;
                     if (this.forceReceiptReload) {
-                        // window.crowdaaDebug.log('C-P-P RVB forceReload');
                         const nativeData = yield this.loadAppStoreReceipt();
                         this.forceReceiptReload = false;
                         if (nativeData) {
@@ -3206,9 +3194,6 @@ var CdvPurchase;
                             this.prepareReceipt(nativeData);
                         }
                     }
-                    // window.crowdaaDebug.log('C-P-P RVB asr', skReceipt.nativeData.appStoreReceipt);
-                    // window.crowdaaDebug.log('C-P-P RVB native', skReceipt.nativeData);
-                    // window.crowdaaDebug.log('C-P-P RVB transactions', skReceipt.transactions);
                     if (!skReceipt.nativeData.appStoreReceipt) {
                         this.log.info('Cannot prepare the receipt validation body, because appStoreReceipt is missing. Refreshing...');
                         const result = yield this.refreshReceipt();
@@ -3236,7 +3221,7 @@ var CdvPurchase;
                         transaction: {
                             type: 'ios-appstore',
                             id: transaction === null || transaction === void 0 ? void 0 : transaction.transactionId,
-                            appStoreReceipt: applicationReceipt.appStoreReceipt,
+                            appStoreReceipt: skReceipt.nativeData.appStoreReceipt,
                         }
                     };
                 });
